@@ -4,6 +4,15 @@ A simple command-line To-Do List application that allows users to manage tasks.
 """
 
 from typing import List
+from datetime import date
+
+class Task:
+    def __init__(self, name):
+        self.name = name
+        self.date_created = date.today()
+
+    def __str__(self):
+        return f"{self.name} (created on {self.date_created})"
 
 
 class Todo:
@@ -28,8 +37,9 @@ class Todo:
             or an error message if the task is empty.
         """
         if task:
-            self.tasks.append(task)
-            print(f"Task '{task}' added successfully.")
+            newTask = Task(task)
+            self.tasks.append(newTask)
+            print(f"Task '{newTask.name}' added successfully.")
         else:
             print("Task cannot be empty.")
 
@@ -43,11 +53,12 @@ class Todo:
             Prints a success message if the task is deleted,
             or an error message if the task is not found.
         """
-        if task in self.tasks:
-            self.tasks.remove(task)
-            print(f"Task '{task}' deleted successfully.")
-        else:
-            print(f"Task '{task}' not found.")
+        for t in self.tasks:
+            if t.name == task:
+                self.tasks.remove(t)
+                print(f"Task '{task}' deleted successfully.")
+                return 
+        print(f"Task '{task}' not found.")
 
     def show_tasks(self) -> None:
         """Display all current tasks in a numbered list.
@@ -61,7 +72,7 @@ class Todo:
         else:
             print("To-Do List:")
             for i, task in enumerate(self.tasks, start=1):
-                print(f"{i}. {task}")
+                print(f"{i}. {task.date_created} {task.name}")
 
 
 def main():
